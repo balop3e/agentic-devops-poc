@@ -47,12 +47,11 @@ jobs:
         env:
           RISK_PROFILE: ${{ github.event.inputs.risk_profile || 'low' }}
         run: |
-          python scripts/create_release_evidence.py `
-            --risk-profile "$RISK_PROFILE" `
-            --commit-sha "${{ github.sha }}" `
-            --workflow-run "${{ github.run_id }}" `
+          python scripts/create_release_evidence.py \
+            --risk-profile "$RISK_PROFILE" \
+            --commit-sha "${{ github.sha }}" \
+            --workflow-run "${{ github.run_id }}" \
             --out evidence/release-evidence.json
-        shell: pwsh
 
       - name: Upload release evidence
         uses: actions/upload-artifact@v4
@@ -90,14 +89,12 @@ jobs:
       - name: Generate agentic review
         id: review
         run: |
-          python scripts/agentic_release_review.py `
-            --evidence release-evidence/release-evidence.json `
+          python scripts/agentic_release_review.py \
+            --evidence release-evidence/release-evidence.json \
             --out release-review/release-review.md
-        shell: pwsh
 
       - name: Add review to workflow summary
-        run: Get-Content release-review/release-review.md | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
-        shell: pwsh
+        run: cat release-review/release-review.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload agentic review
         uses: actions/upload-artifact@v4
