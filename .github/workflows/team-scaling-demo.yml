@@ -1,0 +1,24 @@
+name: Team Scaling Demo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  payments_team:
+    name: Payments Team
+    uses: ./.github/workflows/reusable-agentic-release-review.yml
+    with:
+      team_name: payments-team
+      risk_profile: low
+      deployment_target: production
+
+  identity_team:
+    name: Identity Team
+    uses: ./.github/workflows/reusable-agentic-release-review.yml
+    with:
+      team_name: identity-team
+      risk_profile: high
+      deployment_target: production

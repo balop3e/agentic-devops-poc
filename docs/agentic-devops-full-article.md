@@ -15,9 +15,9 @@ The demo was built to address four assigned work items:
 | 1887 | Human approval gates in agentic pipelines | Shows GitHub environment protection rules pausing production deployment |
 | 1890 | Scaling Agentic DevOps across teams | Explains reusable workflows, RBAC, shared guardrails, and platform team ownership |
 
-## Screenshot Placeholders
+## Screenshots Used
 
-Replace each placeholder below with the screenshots captured during the demo.
+The article uses the screenshots captured during the GitHub Actions and Microsoft Foundry demo.
 
 | Figure | Screenshot |
 | --- | --- |
@@ -117,7 +117,7 @@ At a high level:
 
 **Figure 1: Repository homepage showing `agentic-devops-poc`.**
 
-`[Insert screenshot: repository homepage]`
+![Figure 1: Repository homepage showing the public Agentic DevOps POC repository.](screenshots/screenshot1.png)
 
 ## 4. Agentic DevOps Architecture Patterns
 
@@ -188,7 +188,7 @@ The proof of concept workflow is:
 
 **Figure 2: GitHub Actions workflow YAML.**
 
-`[Insert screenshot: workflow YAML]`
+![Figure 2: GitHub Actions workflow YAML defining build, review, staging, and production jobs.](screenshots/screenshot2.png)
 
 The workflow uses the following GitHub Actions concepts.
 
@@ -252,11 +252,11 @@ In this demo:
 
 **Figure 3: GitHub environments showing `staging` and `production`.**
 
-`[Insert screenshot: environments list]`
+![Figure 3: GitHub environments showing staging and production deployment targets.](screenshots/screenshot4.png)
 
 **Figure 4: Production environment required reviewer rule.**
 
-`[Insert screenshot: production required reviewer]`
+![Figure 4: Production environment protection rule requiring a reviewer.](screenshots/screenshot5.png)
 
 This is one of the most important parts of the architecture. The approval rule is not embedded inside the agent. It is enforced by the deployment platform.
 
@@ -309,11 +309,11 @@ The review output includes:
 
 **Figure 5: Manual workflow run waiting for production approval.**
 
-`[Insert screenshot: workflow waiting for production approval]`
+![Figure 5: Manual workflow run paused because production requires review.](screenshots/screenshot6.png)
 
 **Figure 6: Agentic release review summary.**
 
-`[Insert screenshot: agentic release review summary]`
+![Figure 6: Agentic release review summary showing proceed, low risk, and human approval required.](screenshots/screenshot6-2.png)
 
 The control decision is the key message:
 
@@ -338,13 +338,21 @@ The production job references the `production` environment. Because that environ
 
 **Figure 7: Approval dialog for production deployment.**
 
-`[Insert screenshot: approval dialog]`
+![Figure 7: Production approval dialog with reviewer comment.](screenshots/screenshot8-1.png)
 
 After approval, the production deployment job completes.
 
 **Figure 8: Completed workflow run after approval.**
 
-`[Insert screenshot: completed workflow run]`
+![Figure 8: Completed GitHub Actions workflow after human approval.](screenshots/screenshot9.png)
+
+The production deployment log also proves that the final authority was the environment gate rather than the agent recommendation.
+
+![Production deployment log showing human approval and environment-gate control.](screenshots/screenshot10.png)
+
+The deployment history gives an audit view of the production deployment after approval.
+
+![Production deployment history in GitHub.](screenshots/screenshot11.png)
 
 ## 7. Human Approval Gates in Agentic Pipelines
 
@@ -384,11 +392,11 @@ Demo resource:
 
 **Figure 9: Azure resource group `rg-agentic-devops-poc`.**
 
-`[Insert screenshot: Azure resource group]`
+![Figure 9: Azure resource group containing the Foundry resource and project.](screenshots/screenshot12.png)
 
 **Figure 10: Foundry resource `balop3e-agentic-foundry`.**
 
-`[Insert screenshot: Foundry resource]`
+![Figure 10: Foundry resource overview in Azure portal.](screenshots/screenshot12-1.png)
 
 ### 8.2 Foundry Project
 
@@ -400,7 +408,7 @@ Demo project:
 
 **Figure 11: Foundry project `agentic-devops-poc`.**
 
-`[Insert screenshot: Foundry project]`
+![Figure 11: Microsoft Foundry project list showing the Agentic DevOps project.](screenshots/screenshot12-2.png)
 
 An architect can think of the project as the working area for a team or product. In a larger organization, each product team might have its own project, while platform teams define shared standards.
 
@@ -418,7 +426,7 @@ Model:
 
 **Figure 12: Model deployment `gpt-4o-mini-agentic`.**
 
-`[Insert screenshot: model deployment]`
+![Figure 12: Foundry model deployment for gpt-4o-mini-agentic.](screenshots/screenshot12-4.png)
 
 For this proof of concept, `gpt-4o-mini` was used because it is lightweight and sufficient for summarizing release evidence.
 
@@ -432,7 +440,11 @@ Demo agent:
 
 **Figure 13: Agent `devops-release-review-agent`.**
 
-`[Insert screenshot: agent page]`
+![Figure 13: Foundry agent instructions for the DevOps release review agent.](screenshots/screenshot12-5.png)
+
+The asset inventory also shows the agent running under the project, which is useful for governance and operations.
+
+![Foundry asset inventory showing the release review agent.](screenshots/screenshot12-3.png)
 
 The agent instructions included guardrails:
 
@@ -456,7 +468,7 @@ The agent responded with:
 
 **Figure 14: Foundry playground response reviewing GitHub release evidence.**
 
-`[Insert screenshot: Foundry playground response]`
+![Figure 14: Foundry playground response reviewing GitHub release evidence.](screenshots/screenshot12-6.png)
 
 This is how the GitHub and Foundry demos connect. GitHub produced the release evidence, while Foundry demonstrated how an AI agent can reason over that evidence.
 
@@ -551,6 +563,35 @@ That is the practical human-in-the-loop pattern.
 
 ### 10.4 1890: Scaling Agentic DevOps Across Teams
 
+The first workflow proves the single-team pattern. To make the scaling story concrete, the repository also includes platform-style scaling artifacts:
+
+| Scaling Artifact | Purpose |
+| --- | --- |
+| `.github/workflows/reusable-agentic-release-review.yml` | A reusable workflow that centralizes the agentic release review pattern |
+| `.github/workflows/team-scaling-demo.yml` | A two-team demo showing `payments-team` and `identity-team` calling the same reusable workflow |
+| `schemas/release-evidence.schema.json` | A shared evidence contract so teams submit release signals in a consistent format |
+| `docs/scaling-agentic-devops-across-teams.md` | A focused explanation of the platform scaling model |
+
+This is important because scaling Agentic DevOps is not only about running one successful pipeline. It is about making the same governed pattern repeatable for many teams.
+
+```mermaid
+flowchart LR
+    platform["Platform Team"]
+    reusable["Reusable Agentic Review Workflow"]
+    schema["Release Evidence Schema"]
+    foundry["Foundry Agent Pattern"]
+    payments["Payments Team"]
+    identity["Identity Team"]
+    approval["Protected Production Environment"]
+
+    platform --> reusable
+    platform --> schema
+    platform --> foundry
+    payments --> reusable
+    identity --> reusable
+    reusable --> approval
+```
+
 To scale this across teams, an organization should avoid every team inventing its own agent and pipeline from scratch. Instead, platform teams should provide reusable building blocks.
 
 Recommended scaling practices:
@@ -567,6 +608,8 @@ Recommended scaling practices:
 - Integrate approval summaries with change management systems.
 
 This turns the demo into an enterprise platform pattern.
+
+In the scaled model, product teams do not need to understand every internal detail of the agentic review implementation. They need to produce release evidence that follows the shared schema and call the reusable workflow. The platform team can then improve the agent prompt, evidence requirements, artifact naming, and approval guidance centrally.
 
 ## 11. Production-Ready Enhancements
 

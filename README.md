@@ -23,7 +23,12 @@ The key architectural idea is simple: the agent can analyze, summarize, and reco
 | `scripts/create_release_evidence.py` | Creates sample CI/CD evidence for the agent review step |
 | `scripts/agentic_release_review.py` | Simulates an AI DevOps review agent in a deterministic way |
 | `.github/workflows/agentic-devops.yml` | GitHub Actions workflow for build, test, review, staging, and production |
+| `.github/workflows/reusable-agentic-release-review.yml` | Reusable release review workflow for scaling the pattern across teams |
+| `.github/workflows/team-scaling-demo.yml` | Two-team scaling demo that calls the reusable workflow |
+| `schemas/release-evidence.schema.json` | Shared release evidence contract for teams |
 | `docs/agentic-devops-architecture.md` | Architecture explanation for the article |
+| `docs/agentic-devops-full-article.md` | Full article draft with screenshots embedded |
+| `docs/scaling-agentic-devops-across-teams.md` | Focused explanation for scaling the pattern across teams |
 | `docs/foundry-agent-instructions.md` | Azure AI Foundry agent instructions for the practical demo |
 | `docs/screenshot-runbook.md` | Screenshot checklist for the final article |
 
@@ -56,3 +61,7 @@ By the end of the demo, you should be able to explain:
 - Why production approval should remain controlled by policy and humans.
 - How Azure AI Foundry can host the agent intelligence behind this pattern.
 - How platform teams can scale the pattern using reusable workflows, environment rules, RBAC, and shared guardrails.
+
+## Scaling Demo
+
+To demonstrate scaling across teams, run the `Team Scaling Demo` workflow manually. It shows two different teams calling the same reusable agentic release review workflow with different risk profiles. This represents the platform engineering pattern for rolling out Agentic DevOps consistently across multiple product teams.

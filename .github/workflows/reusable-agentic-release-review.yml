@@ -1,0 +1,85 @@
+name: Reusable Agentic Release Review
+
+on:
+  workflow_call:
+    inputs:
+      team_name:
+        description: Team or service using the shared release review workflow
+        type: string
+        required: true
+      risk_profile:
+        description: Release evidence profile to generate for the demo
+        type: string
+        required: false
+        default: low
+      deployment_target:
+        description: Target environment being evaluated
+        type: string
+        required: false
+        default: production
+    outputs:
+      decision:
+        description: Agentic release decision
+        value: ${{ jobs.agentic_release_review.outputs.decision }}
+      risk_level:
+        description: Agentic release risk level
+        value: ${{ jobs.agentic_release_review.outputs.risk_level }}
+      risk_score:
+        description: Agentic release risk score
+        value: ${{ jobs.agentic_release_review.outputs.risk_score }}
+
+permissions:
+  contents: read
+
+jobs:
+  agentic_release_review:
+    name: ${{ inputs.team_name }} Release Review
+    runs-on: ubuntu-latest
+    outputs:
+      decision: ${{ steps.review.outputs.decision }}
+      risk_level: ${{ steps.review.outputs.risk_level }}
+      risk_score: ${{ steps.review.outputs.risk_score }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Create shared release evidence
+        run: |
+          python scripts/create_release_evidence.py \
+            --risk-profile "${{ inputs.risk_profile }}" \
+            --deployment-target "${{ inputs.deployment_target }}" \
+            --commit-sha "${{ github.sha }}" \
+            --workflow-run "${{ github.run_id }}" \
+            --out evidence/release-evidence.json
+
+      - name: Generate shared agentic review
+        id: review
+        run: |
+          python scripts/agentic_release_review.py \
+            --evidence evidence/release-evidence.json \
+            --out evidence/release-review.md
+
+      - name: Add team summary
+        run: |
+          {
+            echo "# ${{ inputs.team_name }} Agentic Release Review"
+            echo
+            cat evidence/release-review.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload review artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.team_name }}-agentic-release-review
+          path: |
+            evidence/release-evidence.json
+            evidence/release-review.md

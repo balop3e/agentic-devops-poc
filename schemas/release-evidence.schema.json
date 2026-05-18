@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/balop3e/agentic-devops-poc/schemas/release-evidence.schema.json",
+  "title": "Agentic DevOps Release Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "commit_sha",
+    "workflow_run",
+    "deployment_target",
+    "total_tests",
+    "failed_tests",
+    "changed_files",
+    "coverage_delta",
+    "high_vulnerabilities",
+    "critical_vulnerabilities",
+    "database_migration",
+    "external_dependency_change"
+  ],
+  "properties": {
+    "commit_sha": {
+      "type": "string",
+      "description": "Commit being evaluated for release."
+    },
+    "workflow_run": {
+      "type": "string",
+      "description": "CI/CD workflow run that produced the release evidence."
+    },
+    "deployment_target": {
+      "type": "string",
+      "description": "Environment being evaluated, such as staging or production."
+    },
+    "total_tests": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failed_tests": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "changed_files": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "coverage_delta": {
+      "type": "number",
+      "description": "Percentage-point change in test coverage."
+    },
+    "high_vulnerabilities": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "critical_vulnerabilities": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "database_migration": {
+      "type": "boolean"
+    },
+    "external_dependency_change": {
+      "type": "boolean"
+    }
+  }
+}
