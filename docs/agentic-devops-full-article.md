@@ -35,6 +35,14 @@ The article uses the screenshots captured during the GitHub Actions and Microsof
 | Figure 12 | Model deployment `gpt-4o-mini-agentic` |
 | Figure 13 | Agent `devops-release-review-agent` |
 | Figure 14 | Foundry playground response reviewing GitHub release evidence |
+| Figure 15 | Agentic review job log |
+| Figure 16 | Workflow artifacts and deployment protection rules |
+| Figure 17 | Production deployment job waiting for approval |
+| Figure 18 | Production approval dialog before comment |
+| Figure 19 | Foundry playground prompt and response split view |
+| Figure 20 | Team Scaling Demo workflow summary |
+| Figure 21 | Team Scaling Demo reusable workflow job details |
+| Figure 22 | Team Scaling Demo workflow YAML |
 
 ## 1. Introduction
 
@@ -315,6 +323,18 @@ The review output includes:
 
 ![Figure 6: Agentic release review summary showing proceed, low risk, and human approval required.](screenshots/screenshot6-2.png)
 
+The job log also shows the exact agentic review step that generated the release recommendation from the uploaded evidence.
+
+**Figure 15: Agentic review job log.**
+
+![Figure 15: Agentic review job log showing the generated release review output.](screenshots/screenshot3.png)
+
+The workflow artifacts make the review auditable. A reviewer can download both the original release evidence and the generated agentic release review.
+
+**Figure 16: Workflow artifacts and deployment protection rules.**
+
+![Figure 16: Workflow artifacts and deployment protection rules.](screenshots/screenshot6-1.png)
+
 The control decision is the key message:
 
 ```text
@@ -336,9 +356,19 @@ This mirrors a common enterprise pattern:
 
 The production job references the `production` environment. Because that environment has a required reviewer, GitHub pauses the job until the reviewer approves it.
 
+**Figure 17: Production deployment job waiting for approval.**
+
+![Figure 17: Production job waiting for approval before the release can continue.](screenshots/screenshot7.png)
+
 **Figure 7: Approval dialog for production deployment.**
 
 ![Figure 7: Production approval dialog with reviewer comment.](screenshots/screenshot8-1.png)
+
+The approval dialog first presents the protected environment and waits for the reviewer to select the environment and provide a decision.
+
+**Figure 18: Production approval dialog before comment.**
+
+![Figure 18: Production approval dialog before the reviewer comment is added.](screenshots/screenshot8.png)
 
 After approval, the production deployment job completes.
 
@@ -469,6 +499,12 @@ The agent responded with:
 **Figure 14: Foundry playground response reviewing GitHub release evidence.**
 
 ![Figure 14: Foundry playground response reviewing GitHub release evidence.](screenshots/screenshot12-6.png)
+
+The screenshot below captures the prompt and response together, making the connection between GitHub release evidence and Foundry agent reasoning more explicit.
+
+**Figure 19: Foundry playground prompt and response split view.**
+
+![Figure 19: Foundry playground prompt and response split view.](screenshots/screenshot12-6-1.png)
 
 This is how the GitHub and Foundry demos connect. GitHub produced the release evidence, while Foundry demonstrated how an AI agent can reason over that evidence.
 
@@ -610,6 +646,24 @@ Recommended scaling practices:
 This turns the demo into an enterprise platform pattern.
 
 In the scaled model, product teams do not need to understand every internal detail of the agentic review implementation. They need to produce release evidence that follows the shared schema and call the reusable workflow. The platform team can then improve the agent prompt, evidence requirements, artifact naming, and approval guidance centrally.
+
+The `Team Scaling Demo` workflow proves this pattern by running two team release reviews through the same reusable workflow.
+
+**Figure 20: Team Scaling Demo workflow summary.**
+
+![Figure 20: Team Scaling Demo workflow summary showing multiple teams using the shared review pattern.](screenshots/screenshot13.png)
+
+The reusable workflow job details show the shared review steps executing for a team-specific pipeline invocation.
+
+**Figure 21: Team Scaling Demo reusable workflow job details.**
+
+![Figure 21: Team Scaling Demo reusable workflow job details.](screenshots/screenshot13-1.png)
+
+The scaling workflow YAML shows how product teams can call the shared release review workflow instead of copying the implementation.
+
+**Figure 22: Team Scaling Demo workflow YAML.**
+
+![Figure 22: Team Scaling Demo workflow YAML calling the reusable release review workflow.](screenshots/screenshot14.png)
 
 ## 11. Production-Ready Enhancements
 
