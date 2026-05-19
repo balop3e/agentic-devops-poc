@@ -87,31 +87,11 @@ The main GitHub Actions run used for the demo was:
 
 ## 3. Architecture Overview
 
-The architecture uses a human-in-the-loop Agentic DevOps pattern.
+The architecture uses a human-in-the-loop Agentic DevOps pattern. The diagram below shows the end-to-end release flow and the scaling pattern used to make the same governed approach repeatable across teams.
 
-```mermaid
-flowchart LR
-    developer["Developer"]
-    repo["GitHub Repository"]
-    workflow["GitHub Actions Workflow"]
-    build["Build and Test"]
-    evidence["Release Evidence"]
-    review["Agentic Release Review"]
-    foundry["Microsoft Foundry Agent"]
-    staging["Staging Environment"]
-    approval["Human Approval Gate"]
-    production["Production Environment"]
+**Architecture Figure: End-to-End Agentic DevOps architecture flow.**
 
-    developer --> repo
-    repo --> workflow
-    workflow --> build
-    build --> evidence
-    evidence --> review
-    foundry -. "Reviews same evidence" .-> review
-    review --> staging
-    staging --> approval
-    approval --> production
-```
+![Architecture Figure: End-to-End Agentic DevOps architecture flow.](architecture/agentic-devops-end-to-end-architecture.png)
 
 At a high level:
 
